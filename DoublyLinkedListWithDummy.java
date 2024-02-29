@@ -75,6 +75,7 @@ public class DoublyLinkedListWithDummy<E> extends DoublyLinkedList<E> {
     public void addFirst(E value){
         insertAfter(head, value);
     }
+
     public void add(int index, E value){
         if (index < 0 || index > count){
             // print error message
@@ -82,9 +83,89 @@ public class DoublyLinkedListWithDummy<E> extends DoublyLinkedList<E> {
         }
         insertAfter(getNode(index-1), value);
     }
+
+
     public void addLast(E value){
         insertAfter(tail.previous(), value);
     }
 
+    public java.lang.String toString(){
+        StringBuffer b = new StringBuffer();
+        DoublyLinkedNode<E> node = head.next();
+        while (node != tail){
+            b.append(node.value());
+            node = node.next();
+            if (node != tail)
+                b.append(", ");
+        }
+        return "[" + b.toString() + "]";
+    }
 
+    public java.lang.String toStringReverse(){
+        // create an empty string
+        String s = "";
+        // create a node and assign it to tail
+        DoublyLinkedNode<E> node = tail;
+        // loop through the list
+        while (node.previous() != head){
+            // append the value of the node to the string
+            s += node.previous().value();
+            // move to the previous node
+            node = node.previous();
+            // if the node is not the head, append a comma to the string
+            if (node != head)
+                s += ", ";
+        }
+        return "[" + s + "]";
+    }
+
+    private E delete(DoublyLinkedNode<E> node){
+        node.previous().setNext(node.next());
+        node.next().setPrevious(node.previous());
+        count--;
+        return node.value();
+    }
+
+    public E removeFirst(){
+        if (isEmpty()) return null;
+        return delete(head.next());
+    }
+
+    public E remove(int index){
+        if (index < 0 || index >= count) return null;
+        return delete(getNode(index));
+    }
+
+    public E removeLast(){
+        if (isEmpty()) return null;
+        return delete(tail.previous());
+    }
+
+    // why do we need 2 remove methods??
+    public E remove(){
+        return removeFirst();
+    }
+
+    public int lastIndexOf(E value){
+        DoublyLinkedNode<E> node = tail;
+        for (int i = count-1; i >= 0; i--){
+            node = node.previous();
+            if (value.equals(node.value()))
+                return i;
+        }
+        return -1;
+    }
+    public int indexOf(E value){
+        DoublyLinkedNode<E> node = head;
+        for (int i = 0; i < count; i++){
+            node = node.next();
+            if (value.equals(node.value()))
+                return i;
+        }
+        return -1;
+    }
+
+    public boolean contains(E value){
+        return indexOf(value) != -1;
+    }
 }
