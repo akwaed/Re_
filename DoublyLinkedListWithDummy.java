@@ -65,5 +65,26 @@ public class DoublyLinkedListWithDummy<E> extends DoublyLinkedList<E> {
         return result;
     }
 
+    private void insertAfter(DoublyLinkedNode<E> previous, E value){
+        DoublyLinkedNode<E> newNode = new DoublyLinkedNode<E>(value, previous.next(), previous);
+        newNode.next().setPrevious(newNode);
+        previous.setNext(newNode);
+        count++;
+    }
+
+    public void addFirst(E value){
+        insertAfter(head, value);
+    }
+    public void add(int index, E value){
+        if (index < 0 || index > count){
+            // print error message
+            System.out.println("Index out of range");
+        }
+        insertAfter(getNode(index-1), value);
+    }
+    public void addLast(E value){
+        insertAfter(tail.previous(), value);
+    }
+
 
 }
